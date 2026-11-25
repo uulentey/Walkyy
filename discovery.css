@@ -146,27 +146,31 @@ button,a,input,select{-webkit-tap-highlight-color:transparent}
 .transit-source{margin:14px 0 0}
 .transit-source a{text-decoration:underline;text-underline-offset:2px}
 .detail-side{position:static;gap:16px}
-.weather-panel{padding:25px;border:1px solid #dfe6d8;border-radius:22px;background:linear-gradient(145deg,#f4f7ed,#fff)}
-.weather-panel h2{font-size:1.05rem;margin-bottom:16px}
+.weather-panel{min-width:0;padding:clamp(16px,4vw,22px);border:1px solid #dfe6d8;border-radius:22px;background:linear-gradient(145deg,#f4f7ed,#fff);overflow-wrap:anywhere}
+.weather-panel h2{font-size:1.05rem;margin-bottom:12px}
 .weather-footnote,.weather-source{font-size:.65rem;color:var(--ink-soft);line-height:1.65}
-.weather-footnote{margin:20px 0 8px}
+.weather-footnote{margin:14px 0 6px}
 .weather-source{text-decoration:underline}
 #weather-status{font-size:.78rem;color:var(--ink-soft)}
 #weather-status:empty{display:none}
-.weather-now{display:flex;justify-content:space-between;align-items:center;margin:8px 0 18px}
-.weather-now strong{font-size:2.6rem;font-weight:600;letter-spacing:-.07em}
+.weather-now{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:8px 0 12px}
+.weather-now strong{display:block;font-size:2.6rem;font-weight:600;letter-spacing:-.07em;line-height:1.15}
 .weather-now .weather-symbol{font-size:2.7rem}
 .weather-description{font-size:.8rem;margin:0;color:var(--ink-soft)}
-.weather-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:18px 0}
-.weather-grid div{font-size:.72rem;color:var(--ink-soft);padding-bottom:10px;border-bottom:1px solid var(--line)}
+.weather-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 12px;margin:12px 0}
+.weather-grid div{font-size:.72rem;line-height:1.4;color:var(--ink-soft);padding-bottom:6px;border-bottom:1px solid var(--line)}
 .weather-grid b{display:block;font-size:.9rem;color:var(--ink);margin-top:4px}
-.weather-days{display:flex;overflow-x:auto;gap:6px;padding:4px 2px 10px;scrollbar-width:thin}
-.weather-days button{flex-shrink:0;border:1px solid var(--line);background:#fff;border-radius:12px;padding:10px;font-size:.67rem;min-width:60px}
+#weather-content{container-type:inline-size}
+.weather-days{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;padding:3px}
+.weather-days button{min-width:0;min-height:44px;border:1px solid var(--line);background:#fff;border-radius:12px;padding:5px 1px;font-size:.67rem;line-height:1.35}
+.weather-days button:focus-visible{outline-width:2px;outline-offset:1px}
 .weather-days button[aria-pressed=true]{background:var(--forest);color:white;border-color:var(--forest)}
 .weather-days button span{display:block;margin-top:4px}
-.weather-hours{display:flex;overflow:auto;gap:14px;margin-top:10px;font-size:.67rem;text-align:center}
-.weather-hours div{flex-shrink:0;display:grid;gap:5px;min-width:38px}
-.weather-updated{font-size:.6rem;color:var(--ink-soft);margin:15px 0 0}
+@container (min-width:420px){.weather-days{grid-template-columns:repeat(7,minmax(0,1fr))}}
+.weather-hours{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,32px),1fr));gap:6px;margin-top:10px;font-size:.67rem;text-align:center}
+.weather-hours:empty{display:none}
+.weather-hours div{display:grid;gap:3px}
+.weather-updated{font-size:.6rem;color:var(--ink-soft);margin:12px 0 0}
 .feature-item{display:grid;grid-template-columns:110px 1fr;gap:18px;padding:20px 0;border-bottom:1px solid var(--line)}
 .feature-item:last-child{border:0}
 .feature-item img{width:110px;height:110px;object-fit:cover;border-radius:14px}
@@ -260,7 +264,7 @@ body[data-page=home] .hero-content{padding-top:120px}
 .detail-shell{display:flex;flex-direction:column;gap:16px}
 .detail-main,.detail-side{width:100%}
 .detail-side{position:static}
-.weather-panel{padding:24px}
+#weather-section{scroll-margin-top:132px}
 .detail-actions{bottom:calc(82px + env(safe-area-inset-bottom));padding:7px;gap:5px;border-radius:22px;width:max-content;max-width:calc(100% - 20px);top:auto}
 .detail-actions>*{flex:0 1 auto;min-width:0}
 .detail-actions .btn,#detail-save-route{font-size:.69rem;padding:10px 13px;min-height:44px}
