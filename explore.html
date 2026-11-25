@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Жимүүд — walky</title>
 <link rel="stylesheet" href="style.css?v=route-editor-2">
+<link rel="stylesheet" href="discovery.css?v=1">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
 </head>
 <body data-page="explore">
 <a class="skip-link" href="#main-content">Үндсэн хэсэг рүү очих</a>
@@ -27,7 +29,7 @@
 </header>
 
 <main id="main-content" class="wrap discovery-main">
-  <div class="discovery-heading"><div><p class="eyebrow">АЛХАХ ЖИМҮҮД</p><h1>Алхах жимээ сонгоорой.</h1><p class="page-subtitle">Хэсэгхэн салхинд гарах уу, бүтэн өдрийг ууланд өнгөрөөх үү? Зав зай, бэлтгэлдээ тааруулаад сонгоорой.</p></div><a class="location-link" href="map.html"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><use href="icons.svg#map"></use></svg>Газрын зураг дээр харах</a></div>
+  <p class="breadcrumbs"><a href="index.html">Нүүр</a><span>/</span>Монгол<span>/</span>Улаанбаатар</p><div class="discovery-heading"><div><p class="eyebrow">АЛХАХ ЖИМҮҮД</p><h1>Улаанбаатарын жимүүд</h1><p class="page-subtitle">Хэсэгхэн салхинд гарах уу, бүтэн өдрийг ууланд өнгөрөөх үү? Зав зай, бэлтгэлдээ тааруулаад сонгоорой.</p></div><a class="location-link" href="map.html"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><use href="icons.svg#map"></use></svg>Газрын зураг дээр харах</a></div>
   <div class="discovery-tools">
   <label class="trail-search"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><use href="icons.svg#search"></use></svg><span class="sr-only">Жимийн нэр эсвэл байршлаар хайх</span><input type="search" id="search-input" placeholder="Нэр, байршлаар хайх…" autocomplete="off"></label>
   <div class="quick-filters" aria-label="Жимийн сонголтууд">
@@ -36,14 +38,16 @@
     <button type="button" data-quick-filter="long" aria-pressed="false">2 цагаас урт</button>
   </div>
   <details class="filter-details"><summary>Нарийвчлан сонгох</summary><div class="filter-options">
-    <label for="difficulty-filter">Хүндрэлийн түвшин<select id="difficulty-filter"><option value="">Бүх түвшин</option><option value="Хялбар">Хялбар</option><option value="Хөнгөн - Дунд">Хөнгөн–дунд</option><option value="Дунд">Дунд</option></select></label>
+    <label for="difficulty-filter">Хүндрэлийн түвшин<select id="difficulty-filter"><option value="">Бүх түвшин</option><option value="Хялбар">Хялбар</option><option value="Хөнгөн - Дунд">Хөнгөн–дунд</option><option value="Дунд">Дунд</option><option value="Хэцүү">Хэцүү</option></select></label>
     <label for="duration-filter">Алхах хугацаа<select id="duration-filter"><option value="">Бүх хугацаа</option><option value="2">2 цаг хүртэл</option><option value="4">4 цаг хүртэл</option><option value="8">8 цаг хүртэл</option></select></label>
+    <label for="distance-filter">Алхах зай<select id="distance-filter"><option value="">Бүх зай</option><option value="5">5 км хүртэл</option><option value="10">10 км хүртэл</option><option value="long">10 км-ээс урт</option></select></label>
   </div></details>
 </div>
-  <div class="section-head"><h2>Бүх жим</h2><span id="route-count" class="route-count" role="status">5 жим</span></div>
+  <div class="view-switch" aria-label="Харагдац"><button type="button" data-view="list" aria-pressed="true">Жагсаалт</button><button type="button" data-view="map" aria-pressed="false">Газрын зураг</button></div>
+  <div class="explore-layout" data-view="list"><section class="explore-results" aria-label="Жимийн үр дүн"><div class="section-head"><h2>Алхах газраа сонгоорой</h2><span id="route-count" class="route-count" role="status">5 жим</span></div>
   <div class="route-grid" id="route-grid"></div>
   <p id="save-feedback" class="save-feedback" role="status">Таалагдсан жимээ хадгалаарай. «Миний алхалтууд» хэсэгт харагдана.</p>
-</main>
+</section><aside class="explore-map-panel" aria-label="Жимүүдийн газрын зураг"><div id="explore-map"></div><p class="map-note">Тэмдэглэсэн жимүүд · Газрын зураг дээр сонгоорой</p><p id="map-status" role="status"></p></aside></div></main>
 
 <footer>
   <div class="wrap">
@@ -59,6 +63,8 @@
 <script src="content-model.js?v=route-editor-2"></script>
 <script src="firebase-service.js?v=route-editor-2"></script>
 <script src="hikes-store.js"></script>
-<script src="main.js?v=admin-1"></script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+<script src="discovery-map.js"></script>
+<script src="main.js?v=discovery-1"></script>
 </body>
 </html>

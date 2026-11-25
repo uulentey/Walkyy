@@ -148,7 +148,7 @@ function escapeHTML(value) {
 function routeCardHTML(route, includeSave = true) {
   const r = Object.fromEntries(Object.entries(route).map(([key, value]) => [key, escapeHTML(value)]));
   const image = /^(https:\/\/|zurag\/)[^\s]+$/i.test(route.image || '') ? r.image : 'zurag/bogdGorhi.jpg';
-  return `<article class="route-card">
+  return `<article class="route-card" data-card-route="${r.id}">
     <a class="route-card-link" href="route-detail.html?id=${encodeURIComponent(route.id)}" aria-label="${r.name} — жимийн тухай үзэх">
       <div class="route-thumb">
         <img src="${image}" alt="" loading="lazy">
@@ -214,6 +214,7 @@ function initExplore() {
   const search = document.querySelector('#search-input');
   const difficulty = document.querySelector('#difficulty-filter');
   const duration = document.querySelector('#duration-filter');
+  const distance = document.querySelector('#distance-filter');
   const count = document.querySelector('#route-count');
   const params = new URLSearchParams(window.location.search);
   if (search) search.value = params.get('q') || '';
@@ -227,25 +228,27 @@ function initExplore() {
     const selectedDuration = duration?.value || '';
     const filtered = ROUTES.filter((route) => {
       const searchable = `${route.name} ${route.desc} ${route.area}`.toLowerCase();
-      return (!query || searchable.includes(query)) && (!selectedDifficulty || route.difficulty === selectedDifficulty) && (!selectedDuration || route.durationHours <= Number(selectedDuration)) && (quickFilter !== 'long' || route.durationHours > 2);
+      return (!query || searchable.includes(query)) && (!selectedDifficulty || route.difficulty === selectedDifficulty) && (!selectedDuration || route.durationHours <= Number(selectedDuration)) && (quickFilter !== 'long' || route.durationHours > 2) && (!distance?.value || (distance.value === 'long' ? route.distanceKm > 10 : route.distanceKm <= Number(distance.value)));
     });
     const list = document.body.dataset.page === 'home' && !query && !selectedDifficulty && !selectedDuration && !quickFilter ? filtered.slice(0, 3) : filtered;
     renderRoutes(list);
+    window.dispatchEvent(new CustomEvent('routes:filtered', { detail: list }));
     if (count) count.textContent = `${list.length} жим`;
   };
-  [search, difficulty, duration].forEach(input => input?.addEventListener('input', () => {
-    if (input !== search) { quickFilter = difficulty?.value || duration?.value ? null : ''; syncChips(); }
+  [search, difficulty, duration, distance].forEach(input => input?.addEventListener('input', () => {
+    if (input !== search) { quickFilter = difficulty?.value || duration?.value || distance?.value ? null : ''; syncChips(); }
     applyFilters();
   }));
   chips.forEach(chip => chip.addEventListener('click', () => {
     quickFilter = chip.dataset.quickFilter;
     if (duration) duration.value = quickFilter === 'short' ? '2' : '';
     if (difficulty) difficulty.value = '';
+    if (distance) distance.value = '';
     syncChips(); applyFilters();
   }));
   document.querySelector('#route-grid')?.addEventListener('click', event => {
     if (!event.target.closest('[data-reset-filters]')) return;
-    [search, difficulty, duration].forEach(input => { if (input) input.value = ''; });
+    [search, difficulty, duration, distance].forEach(input => { if (input) input.value = ''; });
     quickFilter = ''; syncChips(); applyFilters(); search?.focus();
   });
   window.addEventListener('routes:updated', applyFilters);

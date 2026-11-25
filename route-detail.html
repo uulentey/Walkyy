@@ -9,6 +9,7 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
     integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
     crossorigin=""/>
+<link rel="stylesheet" href="discovery.css?v=3">
 </head>
 <body data-page="detail">
 <a class="skip-link" href="#main-content">Үндсэн хэсэг рүү очих</a>
@@ -32,7 +33,11 @@
 
 <main id="main-content" class="wrap route-detail-main">
   <a class="back-link" href="explore.html">← Жимүүд рүү буцах</a>
-  <section class="route-gallery" id="route-gallery" aria-label="Жим, ойр орчмын зургууд" hidden>
+  <div class="detail-heading"><div class="detail-copy"><p class="eyebrow" id="route-area">ЖИМИЙН ТУХАЙ</p><h1 id="route-name">—</h1><p id="route-desc"></p></div><div class="detail-badge"><span>Хүндрэлийн түвшин</span><strong id="route-badge">—</strong></div></div>
+  <section class="detail-section">
+    <div class="stat-row" id="stat-row"></div>
+    <nav class="detail-tabs" aria-label="Жимийн хэсгүүд"><a href="#overview">Тойм</a><a href="#trail-transit">Автобус</a><a href="#weather-section">Цаг агаар</a><a href="#natural-features">Байгалийн онцлог</a><a href="#preparation-section">Бэлтгэл</a></nav>
+    <div class="trail-visuals">  <section class="route-gallery" id="route-gallery" aria-label="Жим, ойр орчмын зургууд" hidden>
     <figure>
       <div class="gallery-feature">
         <img class="detail-hero" id="gallery-image" alt="" decoding="async">
@@ -46,20 +51,31 @@
     <p class="sr-only" id="gallery-status" role="status" aria-live="polite"></p>
     <p class="gallery-unavailable" id="gallery-unavailable" hidden>Зургийг харуулж чадсангүй. Түр хүлээгээд хуудсаа дахин нээгээрэй.</p>
   </section>
-  <div class="detail-heading"><div class="detail-copy"><p class="eyebrow" id="route-area">ЖИМИЙН ТУХАЙ</p><h1 id="route-name">—</h1><p id="route-desc"></p></div><div class="detail-badge"><span>Хүндрэлийн түвшин</span><strong id="route-badge">—</strong></div></div>
-  <section class="detail-section">
-    <div class="stat-row" id="stat-row"></div>
-    <div class="detail-actions"><button class="save-route" id="detail-save-route" type="button" hidden>Хадгалах</button><button class="btn detail-plan-button" id="detail-plan-route" type="button" aria-pressed="false" disabled>Төлөвлөх</button><a class="btn detail-hikes-link" href="my-hikes.html">Миний алхалтууд →</a><a id="google-maps-link" class="btn btn-dark" href="#" target="_blank" rel="noopener noreferrer">Тэмдэглэсэн цэгийг харах ↗</a></div>
-    <p id="detail-hike-state" class="detail-hike-state" role="status"></p>
+<div class="detail-map-preview"><div id="map"></div><span class="map-overlay-label">Жимийн зураг</span></div></div>
+    <div class="detail-actions"><button class="save-route" id="detail-save-route" type="button" hidden>Хадгалах</button><button class="btn detail-plan-button" id="detail-plan-route" type="button" aria-pressed="false" disabled>Төлөвлөх</button><a id="google-maps-link" class="btn btn-dark" target="_blank" rel="noopener noreferrer" aria-label="Жимийн төгсгөлийг Google Maps дээр харах" hidden>Жимийн төгсгөл ↗</a></div>
+    <p id="detail-hike-state" class="detail-hike-state" role="status"></p><a class="btn detail-hikes-link" href="my-hikes.html">Миний алхалтууд →</a>
     <p id="save-feedback" class="save-feedback" role="status"></p>
     <div class="detail-shell">
       <div class="detail-main">
-        <div class="map-card"><div id="map"></div></div>
-        <div class="detail-card detail-story"><p class="card-kicker">Жимийн тухай</p><h2>Энэ жимээр алхахад</h2><p id="route-story"></p></div>
+
+        <div id="overview" class="detail-card detail-story"><p class="card-kicker">Жимийн тухай</p><h2>Энэ жимээр алхахад</h2><p id="route-story"></p></div>
+        <section class="detail-card transit-card" id="trail-transit" aria-labelledby="transit-title" hidden>
+          <h2 id="transit-title">Автобусаар яаж очих вэ?</h2>
+          <p class="transit-note">Жимд тэмдэглэсэн цэг рүү автобусны зам хайх эсвэл ойролцоох буудлуудыг харна уу.</p>
+          <div class="transit-links">
+            <a class="btn btn-dark" id="transit-directions" target="_blank" rel="noopener noreferrer" hidden>Байршлаасаа автобусны зам хайх ↗</a>
+            <button class="btn" id="transit-load-stops" type="button" aria-controls="transit-stops" hidden>Ойр буудлуудыг харах</button>
+          </div>
+          <p id="transit-area-route" class="transit-note" hidden>Тэрэлж орчимд Х:4 «10 шар – Тэрэлж» чиглэл нийтлэгдсэн. Мэлхий хаданд ойр буух буудлыг UBCard дээр шалгаарай. <a class="text-button" href="https://www.ubtransport.mn/a/47" target="_blank" rel="noopener noreferrer">Эх сурвалж ↗</a></p>
+          <p id="transit-status" role="status" tabindex="-1"></p>
+          <ul id="transit-stops" class="transit-stops" aria-label="Ойролцоох автобусны буудлууд"></ul>
+          <p class="transit-note transit-source">Буудлын мэдээлэл: <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">© OpenStreetMap</a>. Хуваарь, чиглэлээ <a href="https://ubcard.mn/" target="_blank" rel="noopener noreferrer">UBCard дээр шалгах ↗</a></p>
+        </section>
+        <section class="detail-card natural-section" id="natural-features" aria-labelledby="features-title"><p class="card-kicker">ЗАМДАА ЮУ ХАРАХ ВЭ?</p><h2 id="features-title">Байгалийн онцлог</h2><div id="feature-list"></div></section>
         <div class="detail-card audience-card" id="audience-section"><p class="card-kicker">Хэнд тохирох вэ?</p><h2 id="audience-title">Өөрийн бэлтгэлдээ тааруулаарай</h2><ul id="route-audience" class="audience-list"></ul></div>
         <div class="safety-note"><span aria-hidden="true">⚠</span><div><b>Явахдаа анхаараарай:</b> <span id="safety-text"></span></div></div>
       </div>
-      <aside class="detail-side" id="preparation-section"><div class="detail-card quick-panel"><p class="card-kicker">АЛХАХААСАА ӨМНӨ</p><h2 id="preparation-title">Эдгээрийг аваарай</h2><div class="check-list" id="route-preparation"></div><a class="browse-link" href="my-hikes.html">Миний алхалтууд →</a></div></aside>
+      <aside class="detail-side"><section class="weather-panel" id="weather-section" aria-labelledby="weather-title"><p class="card-kicker">АЛХАЛТАА ТӨЛӨВЛӨХӨД</p><h2 id="weather-title">Жимийн орчмын цаг агаар</h2><p id="weather-status" role="status">Мэдээг ачаалж байна…</p><div id="weather-content"></div><button id="weather-retry" class="text-button" type="button" hidden>Дахин оролдох ↻</button><p class="weather-footnote">Нэг цэгийн урьдчилсан мэдээ. Уулын зам дагуух нөхцөл өөр байж болно.</p><a class="weather-source" href="https://open-meteo.com/" target="_blank" rel="noopener noreferrer">Цаг агаар: Open-Meteo ↗</a></section><div class="detail-card quick-panel" id="preparation-section"><p class="card-kicker">АЛХАХААСАА ӨМНӨ</p><h2 id="preparation-title">Эдгээрийг аваарай</h2><div class="check-list" id="route-preparation"></div><a class="browse-link" href="my-hikes.html">Миний алхалтууд →</a></div></aside>
     </div>
   </section>
 </main>
@@ -81,9 +97,13 @@
 <script src="content-model.js?v=route-editor-2"></script>
 <script src="firebase-service.js?v=route-editor-2"></script>
 <script src="hikes-store.js"></script>
-<script src="main.js?v=admin-1"></script>
+<script src="main.js?v=discovery-1"></script>
 <script src="route-gallery.js?v=route-gallery-1"></script>
 <script src="route-content.js"></script>
-<script src="route-details.js?v=route-editor-2"></script>
+<script src="trail-weather.js"></script>
+<script src="trail-features.js"></script>
+<script src="trail-insights.js"></script>
+<script src="trail-transit.js?v=2"></script>
+<script src="route-details.js?v=discovery-3"></script>
 </body>
 </html>

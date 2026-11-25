@@ -37,6 +37,9 @@ function renderDetailHikeActions(state = window.WalkyHikes.getState()) {
     renderDetailHikeActions();
     document.querySelector('.detail-section').hidden = !route;
     renderRouteGallery(route);
+    document.querySelector(".detail-tabs").hidden = !route;
+    window.WalkyInsights.render(route);
+    window.WalkyTransit.render(route);
 
     if (!route) {
       document.getElementById('detail-save-route').hidden = true;
@@ -48,6 +51,7 @@ function renderDetailHikeActions(state = window.WalkyHikes.getState()) {
       return;
     }
 
+    document.title = `${route.name} — walky`;
     document.getElementById('route-name').textContent = route.name;
     const saveButton = document.getElementById('detail-save-route');
     saveButton.dataset.routeId = route.id;
@@ -87,19 +91,13 @@ function renderDetailHikeActions(state = window.WalkyHikes.getState()) {
     });
     document.getElementById('preparation-section').hidden = !guidance.preparation.length;
     document.getElementById('audience-section').hidden = !guidance.audience.length;
-    document.querySelector('.detail-shell').classList.toggle('without-preparation', !guidance.preparation.length);
+    // The forecast remains visible even when the preparation checklist is empty.
 
     const mapsLink = document.getElementById('google-maps-link');
-    if (route.track && route.track.length > 0) {
-      const [lat, lng] = route.track[0];
-      mapsLink.href = `https://www.google.com/maps/search/?api=1&query=${lat},${lng}`;
-      mapsLink.textContent = ' Тэмдэглэсэн цэгийг харах ↗';
-      mapsLink.removeAttribute('aria-disabled');
-    } else {
-      mapsLink.removeAttribute('href');
-      mapsLink.textContent = 'Тэмдэглэсэн цэг нь одоохондоо алга';
-      mapsLink.setAttribute('aria-disabled', 'true');
-    }
+    const endUrl = window.WalkyTransit.endpointMapsUrl(route);
+    mapsLink.hidden = !endUrl;
+    if (endUrl) mapsLink.href = endUrl;
+    else mapsLink.removeAttribute('href');
 
     let safetyText = '';
     switch (route.difficulty) {
@@ -127,7 +125,9 @@ function renderDetailHikeActions(state = window.WalkyHikes.getState()) {
         attribution: 'Map data: &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://opentopomap.org">OpenTopoMap</a>'
       }).addTo(map);
 
-      const polyline = L.polyline(route.track, { color: '#235843', weight: 4 }).addTo(map);
+      const polyline = L.polyline(route.track, { color: '#37844b', weight: 5 }).addTo(map);
+      L.circleMarker(route.track[0], { radius: 7, color: '#fff', weight: 3, fillColor: '#235843', fillOpacity: 1 }).addTo(map);
+      window.WalkyInsights.addMapFeatures(map, route);
       map.fitBounds(polyline.getBounds(), { padding: [24, 24] });
     } else {
       document.getElementById('map').innerHTML =
